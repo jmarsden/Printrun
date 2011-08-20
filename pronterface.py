@@ -958,7 +958,9 @@ class PronterWindow(wx.Frame,pronsole.pronsole):
         fn=self.filename
         try:
             self.filename=self.filename.replace(".stl","_export.gcode").replace(".STL","_export.gcode")
-            self.f=[i.replace("\n","").replace("\r","") for i in open(self.filename)]
+            of=open(self.filename)
+            self.f=[i.replace("\n","").replace("\r","") for i in of]
+            of.close
             if self.p.online:
                     wx.CallAfter(self.printbtn.Enable)
                     
@@ -1008,8 +1010,10 @@ class PronterWindow(wx.Frame,pronsole.pronsole):
             if name.lower().endswith(".stl"):
                 self.skein(name)
             else:
-                self.f=[i.replace("\n","").replace("\r","") for i in open(name)]
                 self.filename=name
+                of=open(self.filename)
+                self.f=[i.replace("\n","").replace("\r","") for i in of]
+                of.close
                 self.status.SetStatusText(_("Loaded ") + name + _(", %d lines") % (len(self.f),))
                 wx.CallAfter(self.printbtn.SetLabel, _("Print"))
                 wx.CallAfter(self.pausebtn.SetLabel, _("Pause"))
